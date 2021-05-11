@@ -1,0 +1,54 @@
+<%- include("header") %>
+<script>
+    function searchProduct() {
+        var barcode = document.getElementById('barcode');
+        var product_id = document.getElementById('product_id');
+        var name = document.getElementById('name');
+        var body = JSON.stringify({
+            barcode: barcode.value,
+        });
+        fetch('searchProduct', {
+            method: 'POST',
+            body: body,
+            headers: {
+                'Content-Type': 'application/json',
+            }
+        })
+        .then(response => response.json())
+        .then(data => {
+            if (data.length > 0) {
+                data = data[0];
+                product_id.value = data.id;
+                name.value = data.name;
+            } else {
+                alert('มาโค้ดไม่ภูกต้อง โปรดป้อนใหม่อีกรอบ')
+                name.value = '';
+            }
+        })
+    }
+</script>
+<div class="panel">
+    <div class="panel-header">
+        <i class="fa fa-arrow-down"></i> รับสิ้นค้าเข้าสต๊อก
+    </div>
+    <div class="panel-body">
+        <form action="" method="post">
+            <div>
+                <label for="">รหัสสินค้า</label>
+                <input type="number" id="barcode" onblur="searchProduct()" />
+                <input type="text" id="name" disabled size="70" />
+                <input type="hidden" name="product_id" id="product_id" />
+            </div>
+            <div>
+                <label for="">จำนวน</label>
+                <input type="number" name="qty" id="qty" />
+            </div>
+            <button class="btn" type="submit">
+                <i class="fa fa-check"></i>
+                Save
+            </button>
+        </form>
+    </div>
+</div>
+
+<%- include("footer") %>
